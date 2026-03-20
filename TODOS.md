@@ -35,6 +35,14 @@ sufficient for MVP but a formal DESIGN.md helps maintain consistency as the app 
 - **Depends on:** MVP running with current inline design specs
 - **Why:** Inline specs cover basics but don't formalize component patterns or brand voice
 
+### Mobile Sidebar Override
+Streamlit sidebar auto-expands on mobile viewports, covering the main content.
+Requires custom CSS injection (`st.markdown` with `<style>`) to force collapsed state on narrow screens.
+- **Effort:** S (human ~2hrs / CC ~10min)
+- **Depends on:** MVP running
+- **Why:** Design review FINDING-004 — mobile usability issue
+- **Source:** /design-review on feat/quantradar-mvp, 2026-03-20
+
 ### 카카오톡 알림톡
 Add Kakao push notifications for time-sensitive signals (especially sell signals).
 More immediate than email for urgent actions.
