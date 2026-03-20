@@ -19,8 +19,9 @@ cols = st.columns(4)
 for i, tmpl in enumerate(STRATEGY_TEMPLATES):
     with cols[i % 4]:
         if st.button(tmpl["name"], key=f"tmpl_{i}", use_container_width=True):
-            st.session_state.strategy_conditions = tmpl["conditions"].copy()
+            st.session_state.strategy_conditions = [c.copy() for c in tmpl["conditions"]]
             st.session_state.strategy_name = tmpl["name"]
+            st.rerun()
 
 st.markdown("---")
 
@@ -28,7 +29,10 @@ st.markdown("---")
 st.subheader("Conditions")
 
 if "strategy_conditions" not in st.session_state:
-    st.session_state.strategy_conditions = []
+    # Auto-select RSI Oversold Bounce as default so backtest isn't empty
+    default = STRATEGY_TEMPLATES[1]  # RSI Oversold Bounce
+    st.session_state.strategy_conditions = [c.copy() for c in default["conditions"]]
+    st.session_state.strategy_name = default["name"]
 
 strategy_name = st.text_input(
     "Strategy Name",
@@ -96,8 +100,9 @@ if stocks:
     selected_ticker = ticker_options[selected_label]
 
     if st.button("▶ Run Backtest"):
-        df = get_cached_prices(selected_ticker)
-        if df.empty or len(df) < 50:
+        if not conditions:
+            st.warning("No conditions set. Select a template or add conditions above.")
+        elif (df := get_cached_prices(selected_ticker)).empty or len(df) < 50:
             st.warning("Not enough price data. Run data refresh first.")
         else:
             strategy = {
