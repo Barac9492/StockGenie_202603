@@ -139,8 +139,9 @@ def run_onboarding():
             st.rerun()
 
 
-# Main
-if is_first_run() and not st.session_state.get("onboarding_complete"):
+# Main — continue onboarding if mid-flow (steps 2-3) even though stocks exist
+onboarding_in_progress = st.session_state.get("onboarding_step", 0) in (2, 3)
+if (is_first_run() or onboarding_in_progress) and not st.session_state.get("onboarding_complete"):
     run_onboarding()
 else:
     st.title("📡 QuantRadar")
