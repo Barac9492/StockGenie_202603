@@ -21,8 +21,15 @@ def fetch_kr_stocks(tickers: list[str], start: str | None = None, end: str | Non
             if df.empty:
                 continue
             df = df.reset_index()
-            df.columns = ["date", "open", "high", "low", "close", "volume",
-                          "trading_value", "price_change"]
+            # pykrx returns Korean column names — rename by position
+            col_map = {df.columns[0]: "date"}
+            # Map Korean or English column names
+            kr_to_en = {"시가": "open", "고가": "high", "저가": "low", "종가": "close",
+                        "거래량": "volume", "등락률": "change_pct", "거래대금": "trading_value"}
+            for col in df.columns[1:]:
+                if col in kr_to_en:
+                    col_map[col] = kr_to_en[col]
+            df = df.rename(columns=col_map)
             df = df[["date", "open", "high", "low", "close", "volume"]]
             df["ticker"] = ticker
             df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
