@@ -54,10 +54,10 @@ def generate_signals(strategy_id: int | None = None):
                     "VALUES (?, ?, ?, ?, ?, ?)",
                     (ticker, today, signal_type, strategy["id"], price, strength)
                 )
-                    new_signals.append({
-                        "ticker": ticker, "date": today, "type": signal_type,
-                        "strategy": strategy["name"], "price": price
-                    })
+                new_signals.append({
+                    "ticker": ticker, "date": today, "type": signal_type,
+                    "strategy": strategy["name"], "price": price
+                })
 
     conn.commit()
     conn.close()
