@@ -111,13 +111,14 @@ if stocks:
 
             # Scoreboard
             st.subheader("Scoreboard")
-            c1, c2, c3, c4 = st.columns(4)
+            c1, c2, c3, c4, c5 = st.columns(5)
             c1.metric("Return", f"{results['total_return_pct']}%",
                        delta=f"vs B&H {benchmark}%")
             c2.metric("Sharpe Ratio", results["sharpe_ratio"])
             c3.metric("Max Drawdown", f"{results['max_drawdown_pct']}%")
             c4.metric("Win Rate", f"{results['win_rate_pct']}%",
                        delta=f"{results['num_trades']} trades")
+            c5.metric("Avg Trade", f"{results.get('avg_trade_pct', 0)}%")
 
             # Equity curve
             fig = go.Figure()
