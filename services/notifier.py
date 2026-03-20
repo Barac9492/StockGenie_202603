@@ -21,7 +21,7 @@ def compose_digest_html(signals: list[dict]) -> str:
             <td style="padding:8px;border-bottom:1px solid #333">{s['ticker']}</td>
             <td style="padding:8px;border-bottom:1px solid #333;color:{color};font-weight:bold">{s['signal_type']}</td>
             <td style="padding:8px;border-bottom:1px solid #333">{s.get('strategy_name', '-')}</td>
-            <td style="padding:8px;border-bottom:1px solid #333">{s.get('price', '-'):,.0f}</td>
+            <td style="padding:8px;border-bottom:1px solid #333">{s.get('price', 0):,.0f}</td>
         </tr>
         """
 

@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import plotly.graph_objects as go
 from models.database import init_db, get_connection
 from services.strategy_engine import (
@@ -16,7 +15,6 @@ st.title("🔧 Strategy Builder")
 
 # Template selector
 st.subheader("Templates")
-template_names = [t["name"] for t in STRATEGY_TEMPLATES]
 cols = st.columns(4)
 for i, tmpl in enumerate(STRATEGY_TEMPLATES):
     with cols[i % 4]:

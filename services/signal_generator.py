@@ -49,18 +49,11 @@ def generate_signals(strategy_id: int | None = None):
                 signal_type = "SELL" if "short" in strategy["name"].lower() or "death" in strategy["name"].lower() else "BUY"
                 strength = 1.0  # Simplified
 
-                # Check for duplicate
-                existing = conn.execute(
-                    "SELECT id FROM signals WHERE ticker = ? AND date = ? AND strategy_id = ?",
-                    (ticker, today, strategy["id"])
-                ).fetchone()
-
-                if not existing:
-                    conn.execute(
-                        "INSERT INTO signals (ticker, date, signal_type, strategy_id, price, strength) "
-                        "VALUES (?, ?, ?, ?, ?, ?)",
-                        (ticker, today, signal_type, strategy["id"], price, strength)
-                    )
+                conn.execute(
+                    "INSERT OR IGNORE INTO signals (ticker, date, signal_type, strategy_id, price, strength) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (ticker, today, signal_type, strategy["id"], price, strength)
+                )
                     new_signals.append({
                         "ticker": ticker, "date": today, "type": signal_type,
                         "strategy": strategy["name"], "price": price

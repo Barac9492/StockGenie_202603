@@ -149,10 +149,13 @@ def get_cached_prices(ticker: str, start: str | None = None, end: str | None = N
 
 def _cache_prices(conn, ticker: str, df: pd.DataFrame):
     """Upsert OHLCV data into price_cache."""
-    for _, row in df.iterrows():
-        conn.execute(
-            "INSERT OR REPLACE INTO price_cache (ticker, date, open, high, low, close, volume) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (ticker, row["date"], row["open"], row["high"], row["low"], row["close"], row["volume"])
-        )
+    rows = [
+        (ticker, row["date"], row["open"], row["high"], row["low"], row["close"], row["volume"])
+        for _, row in df.iterrows()
+    ]
+    conn.executemany(
+        "INSERT OR REPLACE INTO price_cache (ticker, date, open, high, low, close, volume) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        rows
+    )
     conn.commit()

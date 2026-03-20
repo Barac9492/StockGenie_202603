@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS signals (
     price REAL,
     strength REAL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (strategy_id) REFERENCES strategies(id)
+    FOREIGN KEY (strategy_id) REFERENCES strategies(id),
+    UNIQUE(ticker, date, strategy_id)
 );
 
 CREATE TABLE IF NOT EXISTS journal (
