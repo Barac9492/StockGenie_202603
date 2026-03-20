@@ -125,10 +125,21 @@ def run_onboarding():
                 kr_tickers = [s["ticker"] for s in stocks if s["market"] == "KR"]
                 us_tickers = [s["ticker"] for s in stocks if s["market"] == "US"]
 
+                fetch_errors = []
                 if kr_tickers:
-                    fetch_kr_stocks(kr_tickers)
+                    try:
+                        fetch_kr_stocks(kr_tickers)
+                    except Exception as e:
+                        fetch_errors.append(f"KR data: {e}")
                 if us_tickers:
-                    fetch_us_stocks(us_tickers)
+                    try:
+                        fetch_us_stocks(us_tickers)
+                    except Exception as e:
+                        fetch_errors.append(f"US data: {e}")
+
+                if fetch_errors:
+                    st.warning(f"Some data could not be fetched: {'; '.join(fetch_errors)}. "
+                               "You can refresh data later in Settings.")
 
             st.success("Setup complete! Navigate to the Dashboard using the sidebar.")
             st.session_state.onboarding_complete = True
