@@ -1,0 +1,7 @@
+streamlit>=1.30.0
+yfinance>=0.2.30
+pykrx>=1.0.44
+finance-datareader>=0.9.60
+plotly>=5.18.0
+pandas>=2.1.0
+python-dotenv>=1.0.0
