@@ -35,7 +35,7 @@ st.caption(f"{health_dot} System: {health_msg}")
 st.subheader("Market Context")
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=300, show_spinner="Loading market data...")
 def _get_market_context():
     return fetch_market_context()
 
