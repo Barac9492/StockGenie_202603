@@ -125,6 +125,38 @@ if stocks:
                        delta=f"{results['num_trades']} trades")
             c5.metric("Avg Trade", f"{results.get('avg_trade_pct', 0)}%")
 
+            # Action items based on results
+            st.markdown("---")
+            st.subheader("What this means")
+
+            if results["num_trades"] == 0:
+                st.warning("**No trades triggered.** This strategy's conditions are too strict for this stock. "
+                           "Try loosening the thresholds (e.g., RSI < 35 instead of < 30) or pick a different template.")
+            else:
+                # Grade the strategy
+                if results["total_return_pct"] > benchmark:
+                    st.success(f"**Strategy beats buy & hold** by {results['total_return_pct'] - benchmark:+.1f}%")
+                elif results["total_return_pct"] > 0:
+                    st.info(f"**Positive return** but underperforms buy & hold ({benchmark}%). "
+                            "The strategy trades selectively — consider if the lower drawdown is worth it.")
+                else:
+                    st.error(f"**Negative return.** This strategy lost money on {selected_label.split(' — ')[1]}. "
+                             "Try a different template or adjust conditions.")
+
+                actions = []
+                if results["win_rate_pct"] >= 60 and results["sharpe_ratio"] > 0.5:
+                    actions.append("**→ Save this strategy** and use it for daily signal generation")
+                if results["max_drawdown_pct"] < -15:
+                    actions.append("**→ Consider tighter stop-loss** — max drawdown was significant")
+                if results["num_trades"] < 5:
+                    actions.append("**→ Test on more stocks** to see if the pattern holds across your universe")
+                if results["num_trades"] >= 5:
+                    actions.append(f"**→ Check individual trades** on **📈 Stock Detail** for {selected_label.split(' — ')[0]}")
+                actions.append("**→ Compare templates** — try other strategies on the same stock to find the best fit")
+
+                for action in actions:
+                    st.markdown(action)
+
             # Equity curve
             fig = go.Figure()
             fig.add_trace(go.Scatter(
