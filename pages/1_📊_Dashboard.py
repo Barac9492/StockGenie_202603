@@ -82,7 +82,10 @@ if signals:
                         record_action(sig["id"], "SKIPPED")
                         st.rerun()
 else:
-    st.info("No signals today. Signals are generated daily — check back after the cron runs.")
+    st.info("No signals today. Here's what you can do:")
+    st.markdown("**→ Run a backtest** on the **🔧 Strategy** page to evaluate your strategy")
+    st.markdown("**→ Check a stock** on **📈 Stock Detail** to see charts and indicators")
+    st.markdown("**→ Add more stocks** in **⚙️ Settings** to expand your signal universe")
 
 st.markdown("---")
 
